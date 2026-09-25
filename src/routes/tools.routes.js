@@ -12,17 +12,11 @@ toolsRouter.get('/', (req, res) => {
 
   if (category === undefined) {
     return res.json({ data: tools });
+    
   }
-
-  if (!CATEGORIES.includes(category)) {
-    return res.status(400).json({
-      error: {
-        message: 'Invalid query',
-        details: { category: 'category must be one of: power, hand, garden, cleaning' },
-      },
-    });
-  }
-
+if (!CATEGORIES.includes(category)) {
+    return res.status(400).json({ error: { message: 'category must be one of: power, hand, garden, cleaning' } });
+  } 
   const matching = tools.filter((tool) => tool.category === category);
   res.json({ data: matching });
 });
@@ -36,22 +30,7 @@ toolsRouter.get('/:id', (req, res) => {
 
   res.json({ data: tool });
 });
-//step 4
-if (!CATEGORIES.includes(body.category)) {
-    errors.category = 'category must be one of: power, hand, garden, cleaning';
-  }
 
-  if (!CONDITIONS.includes(body.condition)) {
-    errors.condition = 'condition must be one of: new, good, worn';
-  }
-
-  if (typeof body.available !== 'boolean') {
-    errors.available = 'available must be true or false';
-  }
-
-  if (!Number.isInteger(body.maxLoanDays) || body.maxLoanDays < 1 || body.maxLoanDays > 14) {
-    errors.maxLoanDays = 'maxLoanDays must be a whole number from 1 to 14';
-  }
 //step 5
 toolsRouter.post('/', validateTool, (req, res) => {
   const tool = { id: randomUUID(), ...req.body };
